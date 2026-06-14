@@ -38,7 +38,6 @@ cd=[
 ]
 for t,f,p,it,fills in cd: qs.append(mk(t,f,p,it,fills,"collision_dynamics"))
 
-
 fr=[
     ("Was the accident report filed by a public authority or only by the claimant?","police_report_filed",2,ALL,["police_report_filed"]),
     ("Were the location metadata on photos consistent with the claimed accident site?","evidence_photos_available",1,DMG,["evidence_photos_available"]),
@@ -58,7 +57,6 @@ fr=[
 ]
 for t,f,p,it,fills in fr: qs.append(mk(t,f,p,it,fills,"fraud_consistency"))
 
-
 rs=[
     ("Was the vehicle inspection performed by an IRDA-certified surveyor?","repair_preference",3,ALL,["repair_preference"]),
     ("Was the workshop's repair estimate itemised by labour and parts?","evidence_photos_available",4,DMG,["evidence_photos_available"]),
@@ -72,7 +70,6 @@ rs=[
     ("Were any hidden damages discovered during the final repair process?","damage_areas",4,DMG,["damage_areas"]),
 ]
 for t,f,p,it,fills in rs: qs.append(mk(t,f,p,it,fills,"repair_settlement"))
-
 
 sa=[
     ("Did the vehicle leave the road during the accident?","lane_action",2,["self_accident","rollover"],["lane_action"]),
@@ -98,7 +95,6 @@ with open(BASE_PATH,"a") as f:
     for q in qs: f.write(json.dumps(q)+"\n")
 total = sum(1 for _ in open(BASE_PATH))
 print(f"Grand total: {total}")
-
 
 last = max(int(json.loads(l)["id"][1:]) for l in open(BASE_PATH))
 c[0] = last

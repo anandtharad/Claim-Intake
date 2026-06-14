@@ -147,30 +147,25 @@ def should_terminate(
     """
     checks = {}
 
-
     user_done, user_reason = _user_requested_termination(user_text)
     checks["user_requested"] = user_reason
     if user_done:
         return {"terminate": True, "reason": user_reason, "checks": checks}
-
 
     no_qs, no_qs_reason = _no_eligible_questions(pool_size)
     checks["no_eligible_questions"] = no_qs_reason
     if no_qs:
         return {"terminate": True, "reason": no_qs_reason, "checks": checks}
 
-
     max_done, max_reason = _max_turns_reached(state)
     checks["max_turns"] = max_reason
     if max_done:
         return {"terminate": True, "reason": max_reason, "checks": checks}
 
-
     core_done, core_reason = _core_fields_complete(state)
     checks["core_fields"] = core_reason
     if core_done:
         return {"terminate": True, "reason": core_reason, "checks": checks}
-
 
     low_val, low_reason = _only_low_priority_remaining(history)
     checks["low_priority"] = low_reason

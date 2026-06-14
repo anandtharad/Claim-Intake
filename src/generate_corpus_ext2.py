@@ -25,7 +25,6 @@ DMG = ["collision","hit_and_run","self_accident","rollover","vandalism","fire","
 
 qs = []
 
-
 tp_extra = [
     ("Did the third party provide their insurance policy details?","third_party_insurer",3,["collision"],["third_party_insurer"]),
     ("Was the third-party vehicle also towed away?","vehicle_towed",4,["collision"],["vehicle_towed"]),
@@ -60,7 +59,6 @@ tp_extra = [
 ]
 for t,f,p,it,fills in tp_extra:
     qs.append(mk(t,f,p,it,fills,"third_party_details"))
-
 
 pol_extra = [
     ("Was the vehicle covered under a fleet insurance policy?","coverage_type",3,ALL,["coverage_type"]),
@@ -97,7 +95,6 @@ pol_extra = [
 for t,f,p,it,fills in pol_extra:
     qs.append(mk(t,f,p,it,fills,"policy_eligibility"))
 
-
 nd_extra = [
     ("Was the vehicle under a bridge or overpass when the disaster struck?","loss_location_road_type",3,["natural_disaster"],["loss_location"]),
     ("Was the vehicle interior soaked due to hailstorm with broken windows?","damage_areas_windshield",3,["natural_disaster"],["damage_areas"]),
@@ -122,7 +119,6 @@ nd_extra = [
 ]
 for t,f,p,it,fills in nd_extra:
     qs.append(mk(t,f,p,it,fills,"natural_disaster_specific"))
-
 
 ib_extra = [
     ("Was this the first insurance claim you have ever filed?","previous_claims",2,ALL,["previous_claims"]),

@@ -3,7 +3,6 @@ import os
 
 BASE_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "question_bank_raw.jsonl")
 
-
 def get_last_id(path):
     last = 0
     if not os.path.exists(path):
@@ -244,7 +243,6 @@ def gen_collision_scenario_matrix():
               "lane_action", 3, {"incident_type": COLLISION_TYPES},
               ["lane_action"], "collision_dynamics"),
         ]
-
 
     for direction in directions:
         qs += [
@@ -607,11 +605,9 @@ if __name__ == "__main__":
     ext_qs = generate_all_extended()
     print(f"\nExtension questions: {len(ext_qs)}")
 
-
     with open(BASE_PATH, "a", encoding="utf-8") as f:
         for q_obj in ext_qs:
             f.write(json.dumps(q_obj, ensure_ascii=False) + "\n")
-
 
     total = 0
     with open(BASE_PATH) as f:

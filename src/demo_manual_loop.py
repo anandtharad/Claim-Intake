@@ -225,30 +225,6 @@ def run_loop(question_bank, auto_inputs=None):
     print("\n  Thank you. Your claim intake has been recorded.")
     return state
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 AUTO_SCRIPT = [
 
     "I was driving on the expressway near Nagpur last Sunday around 9pm in heavy rain when a truck hit me from behind really hard",

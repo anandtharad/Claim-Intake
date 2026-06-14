@@ -5,7 +5,6 @@ from typing import Dict, Any, List, Tuple, Optional
 from copy import deepcopy
 from datetime import datetime
 
-
 try:
     import spacy
     _nlp = spacy.load("en_core_web_sm")
@@ -14,23 +13,17 @@ except Exception:
     SPACY_AVAILABLE = False
     _nlp = None
 
-
 try:
     import dateparser
     DATEPARSER_AVAILABLE = True
 except ImportError:
     DATEPARSER_AVAILABLE = False
 
-
 _VOCAB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "vocabulary.json")
 with open(_VOCAB_PATH) as f:
     VOCAB = json.load(f)
 
 VEHICLE_MAKES = [m.lower() for m in VOCAB["vehicle_makes"]]
-
-
-
-
 
 NEGATION_WORDS = {"no", "not", "never", "none", "didn't", "did not", "wasn't",
                   "was not", "don't", "do not", "cannot", "can't", "without",
@@ -53,10 +46,6 @@ def _negated(text, pattern):
     start = m.start()
     prefix = text[max(0, start-40):start].lower()
     return any(neg in prefix for neg in NEGATION_WORDS)
-
-
-
-
 
 INCIDENT_KEYWORDS = {
     "collision":        ["collision", "collided", "hit", "accident", "crash", "crashed",
@@ -114,10 +103,6 @@ def extract_incident_type(text):
     best = max(top_candidates, key=lambda k: SUBTYPE_PRIORITY.get(k, 0))
     return best
 
-
-
-
-
 DATE_PATTERNS = [
     r'\b(\d{1,2}(?:st|nd|rd|th)?\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)[,\s]+\d{4})\b',
     r'\b((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?[,\s]+\d{4})\b',
@@ -173,10 +158,6 @@ def extract_datetime(text):
                 return ent.text
     return None
 
-
-
-
-
 ROAD_TYPE_KEYWORDS = {
     "highway":    ["highway", "nh ", "sh ", "national highway", "state highway", "expressway", "freeway"],
     "urban":      ["urban", "city road", "city street", "main road", "market road", "city centre", "town"],
@@ -214,10 +195,6 @@ def extract_location(text):
                 result["city"] = ent.text
                 break
     return result
-
-
-
-
 
 YEAR_PATTERN = re.compile(r'\b(19[89]\d|20[0-2]\d)\b')
 REG_PATTERN  = re.compile(r'\b([A-Z]{2}\s?\d{2}\s?[A-Z]{1,3}\s?\d{4})\b', re.IGNORECASE)
@@ -259,10 +236,6 @@ def extract_registration(text):
     if m:
         return m.group(1).upper().replace(" ", "")
     return None
-
-
-
-
 
 def extract_drivable(text):
     text_l = text.lower()
@@ -507,10 +480,6 @@ def extract_flood_specifics(text):
         result["flood_engine_cranked"] = False
     return result
 
-
-
-
-
 CORRECTION_SIGNALS = [
     "actually", "i meant", "correction", "sorry", "mistake",
     "not exactly", "i was wrong", "let me correct", "to clarify",
@@ -521,10 +490,6 @@ CORRECTION_SIGNALS = [
 def detect_correction(text):
     text_l = text.lower()
     return any(sig in text_l for sig in CORRECTION_SIGNALS)
-
-
-
-
 
 def extract_settlement_preference(text):
     text_l = text.lower()
@@ -542,10 +507,6 @@ def extract_towing_required(text):
     if any(p in text_l for p in ["no towing", "don't need towing", "can drive it"]):
         return False
     return None
-
-
-
-
 
 def _merge_delta(state, delta):
     new_state = deepcopy(state)
@@ -611,10 +572,6 @@ def _update_extracted_categories(state, delta):
             if "vehicle_details" not in extracted:
                 extracted.append("vehicle_details")
     return extracted
-
-
-
-
 
 def extract_delta(user_text, current_state, context_field=None):
     """
@@ -724,7 +681,6 @@ def extract_delta(user_text, current_state, context_field=None):
     if towing is not None:
         delta["towing_required"] = towing
 
-
     if not delta and not corrections and context_field:
         _AFFIRM = {"yes", "yeah", "yep", "yup", "correct", "that's right",
                    "thats right", "sure", "definitely", "absolutely",
@@ -750,7 +706,6 @@ def extract_delta(user_text, current_state, context_field=None):
                 delta[context_field] = True
             elif t in _NEGATE or any(t.startswith(n) for n in _NEGATE):
                 delta[context_field] = False
-
 
     STRING_CONTEXT_MAP = {
         "impact_direction": {
@@ -824,10 +779,6 @@ def apply_delta(current_state, delta, corrections, answered_qid=None):
         new_state["answered_question_ids"] = answered
 
     return new_state
-
-
-
-
 
 if __name__ == "__main__":
     test_inputs = [

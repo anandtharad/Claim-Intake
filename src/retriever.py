@@ -49,9 +49,6 @@ RELEVANCE_BACKEND = (
 BASE = os.path.join(os.path.dirname(__file__), "..", "data")
 BANK_PATH = os.path.join(BASE, "question_bank_validated.jsonl")
 
-
-
-
 W_PRIORITY  = 0.50
 W_RELEVANCE = 0.30
 W_GAP_FILL  = 0.20
@@ -65,10 +62,6 @@ def load_question_bank(path: str = BANK_PATH) -> List[dict]:
             if line:
                 qs.append(json.loads(line))
     return qs
-
-
-
-
 
 def _state_value(state: dict, field: str) -> Any:
     """Safely get a nested or flat field from claim state."""
@@ -91,17 +84,14 @@ def _field_is_known(state: dict, field: str) -> bool:
     """
     already = state.get("already_extracted_categories", [])
 
-
     if field in already:
         return True
-
 
     base = field.split("_")[0] if "_" in field else field
     if any(a.startswith(base) for a in already):
 
         if field in already or base in already:
             return True
-
 
     val = _state_value(state, field)
     if val is None:
@@ -125,18 +115,15 @@ def _trigger_matches(q: dict, state: dict) -> bool:
     """
     triggers = q.get("triggers", {})
 
-
     it_triggers = triggers.get("incident_type", [])
     state_category = state.get("category")
     if it_triggers and state_category not in it_triggers:
         return False
 
-
     req_fields = triggers.get("required_fields_present", [])
     for rf in req_fields:
         if not _field_is_known(state, rf):
             return False
-
 
     bool_conditions = {
         k: v for k, v in triggers.items()
@@ -180,7 +167,6 @@ def hard_filter(questions: List[dict], state: dict) -> List[dict]:
         if q["id"] in answered:
             continue
 
-
         qf = q.get("question_field", "")
         if qf in extracted:
             continue
@@ -189,16 +175,13 @@ def hard_filter(questions: List[dict], state: dict) -> List[dict]:
         if qf_base in extracted:
             continue
 
-
         if not _trigger_matches(q, state):
             continue
-
 
         if state.get("police_report_filed") is False:
             fill_fields = q.get("targets", {}).get("fill_fields", [])
             if any(ff in ("fir_number", "police_station") for ff in fill_fields):
                 continue
-
 
         if _target_already_filled(q, state):
             continue
@@ -206,10 +189,6 @@ def hard_filter(questions: List[dict], state: dict) -> List[dict]:
         candidates.append(q)
 
     return candidates
-
-
-
-
 
 def _priority_score(q: dict) -> float:
     """Higher priority (lower int) → higher score. Priority 1 → 1.0, Priority 5 → 0.2"""
@@ -246,7 +225,6 @@ def _build_state_text(state: dict) -> str:
         val = state.get(field)
         if val:
             parts.append(str(val).replace("_", " "))
-
 
     if state.get("third_party_involved"):
         parts.append("third party involved")
@@ -309,7 +287,6 @@ def _relevance_score_tfidf(candidates: List[dict], state: dict) -> Dict[str, flo
         q_vecs = tfidf_matrix[1:]
         sims = cosine_similarity(state_vec, q_vecs).flatten()
 
-
         min_s, max_s = sims.min(), sims.max()
         if max_s > min_s:
             sims = (sims - min_s) / (max_s - min_s)
@@ -339,7 +316,6 @@ def score_candidates(candidates: List[dict], state: dict) -> List[Dict]:
     """
     if not candidates:
         return []
-
 
     if RELEVANCE_BACKEND == "sbert":
         relevance_map = _relevance_score_sbert(candidates, state)
@@ -387,7 +363,6 @@ def get_next_question(
 
     if not candidates:
         return None
-
 
     scored = score_candidates(candidates, claim_state)
     best = scored[0]

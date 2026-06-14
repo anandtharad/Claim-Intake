@@ -4,14 +4,12 @@ import hashlib
 from collections import defaultdict, Counter
 from typing import List, Dict, Tuple
 
-
 BASE = os.path.join(os.path.dirname(__file__), "..", "data")
 RAW_PATH      = os.path.join(BASE, "question_bank_raw.jsonl")
 VALID_PATH    = os.path.join(BASE, "question_bank_validated.jsonl")
 REJECT_PATH   = os.path.join(BASE, "rejected_questions.jsonl")
 REPORT_PATH   = os.path.join(BASE, "validation_report.json")
 VOCAB_PATH    = os.path.join(BASE, "vocabulary.json")
-
 
 with open(VOCAB_PATH) as f:
     VOCAB = json.load(f)
@@ -72,10 +70,6 @@ def write_jsonl(questions: List[dict], path: str):
         for q in questions:
             f.write(json.dumps(q, ensure_ascii=False) + "\n")
 
-
-
-
-
 def pass_a_schema(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
     valid, rejected = [], []
     seen_ids = set()
@@ -83,11 +77,9 @@ def pass_a_schema(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
     for q in questions:
         reasons = []
 
-
         missing = REQUIRED_KEYS - set(q.keys())
         if missing:
             reasons.append(f"missing_keys:{sorted(missing)}")
-
 
         qid = q.get("id", "")
         if qid in seen_ids:
@@ -95,16 +87,13 @@ def pass_a_schema(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
         else:
             seen_ids.add(qid)
 
-
         text = q.get("text", "")
         if not isinstance(text, str) or len(text.strip()) < 10:
             reasons.append("text_too_short_or_invalid")
 
-
         priority = q.get("priority")
         if not isinstance(priority, int) or not (1 <= priority <= 5):
             reasons.append(f"invalid_priority:{priority}")
-
 
         triggers = q.get("triggers", {})
         if not isinstance(triggers, dict):
@@ -117,7 +106,6 @@ def pass_a_schema(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
                 bad_it = [x for x in it if x not in VALID_INCIDENT_TYPES]
                 if bad_it:
                     reasons.append(f"unknown_incident_types:{bad_it}")
-
 
         targets = q.get("targets", {})
         if not isinstance(targets, dict) or "fill_fields" not in targets:
@@ -135,10 +123,6 @@ def pass_a_schema(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
 
     return valid, rejected
 
-
-
-
-
 def pass_b_logic(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
     valid, rejected = [], []
 
@@ -150,16 +134,12 @@ def pass_b_logic(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
         qfield = q.get("question_field", "")
         req_present = triggers.get("required_fields_present", [])
 
-
         if qfield in req_present:
             reasons.append(f"circular_dependency:{qfield}_in_required_fields_present")
-
-
 
         for ff in fill_fields:
             if ff in req_present:
                 reasons.append(f"fill_field_also_required_present:{ff}")
-
 
         incident_types_in_trigger = triggers.get("incident_type", [])
         is_theft_only = set(incident_types_in_trigger) <= {"theft", "theft_attempted"}
@@ -174,14 +154,12 @@ def pass_b_logic(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
         if "theft_keys_available" in fill_fields and is_collision_only:
             reasons.append("theft_field_used_for_non_theft_incident")
 
-
         text = q.get("text", "")
         if not text.endswith("?") and not any(
             text.lower().startswith(w) for w in
             ["select", "describe", "list", "confirm", "provide", "walk", "tell"]
         ):
             reasons.append("text_not_a_question_form")
-
 
         if q.get("priority") == 1 and not incident_types_in_trigger:
             reasons.append("priority1_without_incident_type_trigger")
@@ -194,10 +172,6 @@ def pass_b_logic(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
 
     return valid, rejected
 
-
-
-
-
 def pass_c_dedup(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
     valid, rejected = [], []
     seen_hashes: Dict[str, str] = {}
@@ -207,12 +181,10 @@ def pass_c_dedup(questions: List[dict]) -> Tuple[List[dict], List[dict]]:
         text = q["text"].strip()
         fp = text_fingerprint(text)
 
-
         if fp in seen_hashes:
             q["rejection_reason"] = f"exact_duplicate_of:{seen_hashes[fp]}"
             rejected.append(q)
             continue
-
 
         near_dup_of = None
         for kept_text, kept_id in kept_texts:
@@ -243,7 +215,6 @@ def pass_d_coverage(questions: List[dict]) -> dict:
         if count < MIN_CATEGORY_COUNT:
             coverage_warnings.append(f"LOW_COVERAGE: {cat} has only {count} questions (min {MIN_CATEGORY_COUNT})")
 
-
     p1_count = priorities.get(1, 0)
     if p1_count < 10:
         coverage_warnings.append(f"LOW_RED_FLAGS: only {p1_count} priority-1 questions")
@@ -260,12 +231,10 @@ def run():
     print("VALIDATION PIPELINE")
     print("=" * 60)
 
-
     raw = load_jsonl(RAW_PATH)
     print(f"\nLoaded {len(raw)} raw questions from {RAW_PATH}")
 
     all_rejected = []
-
 
     print("\n--- Pass A: Schema Validation ---")
     valid_a, rej_a = pass_a_schema(raw)
@@ -275,7 +244,6 @@ def run():
         for q in rej_a[:3]:
             print(f"    [{q['id']}] {q.get('rejection_reason','')[:80]}")
 
-
     print("\n--- Pass B: Logic Validation ---")
     valid_b, rej_b = pass_b_logic(valid_a)
     all_rejected.extend(rej_b)
@@ -284,7 +252,6 @@ def run():
         for q in rej_b[:3]:
             print(f"    [{q['id']}] {q.get('rejection_reason','')[:80]}")
 
-
     print("\n--- Pass C: Deduplication ---")
     valid_c, rej_c = pass_c_dedup(valid_b)
     all_rejected.extend(rej_c)
@@ -292,7 +259,6 @@ def run():
     exact = sum(1 for q in rej_c if "exact_duplicate" in q.get("rejection_reason",""))
     near  = sum(1 for q in rej_c if "near_duplicate" in q.get("rejection_reason",""))
     print(f"    Exact duplicates: {exact}  |  Near-duplicates: {near}")
-
 
     print("\n--- Pass D: Coverage Check ---")
     coverage = pass_d_coverage(valid_c)
@@ -309,7 +275,6 @@ def run():
     print(f"\nPriority distribution:")
     for p, count in coverage["priority_counts"].items():
         print(f"  Priority {p}: {count}")
-
 
     write_jsonl(valid_c, VALID_PATH)
     write_jsonl(all_rejected, REJECT_PATH)

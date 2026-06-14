@@ -6,13 +6,6 @@ from typing import List, Dict, Any
 
 OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "question_bank_raw.jsonl")
 
-
-
-
-
-
-
-
 QUESTIONS: List[Dict[str, Any]] = []
 _id_counter = [1]
 
@@ -29,13 +22,8 @@ def make_q(text: str, field: str, priority: int, triggers: dict, fill_fields: li
         "targets": {"fill_fields": fill_fields}
     }
 
-
-
-
-
 def gen_incident_basics():
     qs = []
-
 
     time_questions = [
         ("What date and time did the incident occur?", "loss_datetime", 2,
@@ -56,7 +44,6 @@ def gen_incident_basics():
     ]
     for text, field, priority, triggers, fills in time_questions:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
-
 
     location_questions = [
         ("In which city did the incident occur?", "loss_location_city", 2,
@@ -84,7 +71,6 @@ def gen_incident_basics():
     for text, field, priority, triggers, fills in location_questions:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
 
-
     moving_questions = [
         ("Was your vehicle moving or parked at the time of the incident?", "vehicle_moving_status", 2,
          {"incident_type": ["collision","vandalism","theft","collision_wall","hit_and_run"]},
@@ -101,7 +87,6 @@ def gen_incident_basics():
     ]
     for text, field, priority, triggers, fills in moving_questions:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
-
 
     weather_questions = [
         ("What were the weather conditions at the time of the incident?", "weather_condition", 3,
@@ -123,7 +108,6 @@ def gen_incident_basics():
     for text, field, priority, triggers, fills in weather_questions:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
 
-
     road_qs = [
         ("What was the road condition — wet, dry, or under construction?", "road_condition", 3,
          {"incident_type": ["collision","hit_and_run","self_accident","rollover","flood"]},
@@ -140,7 +124,6 @@ def gen_incident_basics():
     ]
     for text, field, priority, triggers, fills in road_qs:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
-
 
     injury_qs = [
         ("Was anyone injured in the incident?", "injury_reported", 1,
@@ -162,7 +145,6 @@ def gen_incident_basics():
     for text, field, priority, triggers, fills in injury_qs:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
 
-
     witness_qs = [
         ("Were there any witnesses to the incident?", "witnesses_present", 3,
          {"incident_type": ["collision","hit_and_run","vandalism","fire"]},
@@ -179,7 +161,6 @@ def gen_incident_basics():
     ]
     for text, field, priority, triggers, fills in witness_qs:
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
-
 
     misc_qs = [
         ("Can you briefly describe what happened in your own words?", "category", 2,
@@ -205,10 +186,6 @@ def gen_incident_basics():
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
 
     return qs
-
-
-
-
 
 def gen_collision_dynamics():
     qs = []
@@ -314,7 +291,6 @@ def gen_collision_dynamics():
     for text, field, priority, triggers, fills in signal_qs:
         qs.append(make_q(text, field, priority, triggers, fills, "collision_dynamics"))
 
-
     collision_misc = [
         ("Was your vehicle involved in a rear-end collision?", "impact_direction", 2,
          {"incident_type": ["collision","hit_and_run"]}, ["impact_direction"]),
@@ -382,10 +358,6 @@ def gen_collision_dynamics():
 
     return qs
 
-
-
-
-
 def gen_damage_assessment():
     qs = []
 
@@ -423,7 +395,6 @@ def gen_damage_assessment():
             ["damage_severity"],
             "damage_assessment"
         ))
-
 
     overall_qs = [
         ("Which parts of the vehicle are visibly damaged?", "damage_areas", 2,
@@ -491,10 +462,6 @@ def gen_damage_assessment():
         qs.append(make_q(text, field, priority, triggers, fills, "damage_assessment"))
 
     return qs
-
-
-
-
 
 def gen_third_party_details():
     qs = []
@@ -576,10 +543,6 @@ def gen_third_party_details():
 
     return qs
 
-
-
-
-
 def gen_legal_reporting():
     qs = []
 
@@ -650,10 +613,6 @@ def gen_legal_reporting():
         qs.append(make_q(text, field, priority, triggers, fills, "legal_reporting"))
 
     return qs
-
-
-
-
 
 def gen_policy_eligibility():
     qs = []
@@ -749,10 +708,6 @@ def gen_policy_eligibility():
 
     return qs
 
-
-
-
-
 def gen_fraud_consistency():
     qs = []
 
@@ -835,10 +790,6 @@ def gen_fraud_consistency():
         qs.append(make_q(text, field, priority, triggers, fills, "fraud_consistency"))
 
     return qs
-
-
-
-
 
 def gen_repair_settlement():
     qs = []
@@ -925,10 +876,6 @@ def gen_repair_settlement():
 
     return qs
 
-
-
-
-
 def gen_theft_specific():
     qs = []
 
@@ -996,10 +943,6 @@ def gen_theft_specific():
 
     return qs
 
-
-
-
-
 def gen_fire_specific():
     qs = []
 
@@ -1066,10 +1009,6 @@ def gen_fire_specific():
 
     return qs
 
-
-
-
-
 def gen_flood_specific():
     qs = []
 
@@ -1133,10 +1072,6 @@ def gen_flood_specific():
         qs.append(make_q(text, field, priority, triggers, fills, "flood_specific"))
 
     return qs
-
-
-
-
 
 def gen_vandalism_specific():
     qs = []
@@ -1202,10 +1137,6 @@ def gen_vandalism_specific():
 
     return qs
 
-
-
-
-
 def gen_vehicle_details():
     qs = []
     vehicle_qs = [
@@ -1244,10 +1175,6 @@ def gen_vehicle_details():
         qs.append(make_q(text, field, priority, triggers, fills, "incident_basics"))
     return qs
 
-
-
-
-
 def generate_all():
     all_questions = []
     generators = [
@@ -1281,7 +1208,6 @@ if __name__ == "__main__":
     print("Generating question corpus...")
     questions = generate_all()
     print(f"\nTotal questions generated: {len(questions)}")
-
 
     from collections import Counter
     cat_counts = Counter(q["category_tag"] for q in questions)
