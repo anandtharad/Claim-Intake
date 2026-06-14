@@ -1,0 +1,59 @@
+{
+  "title": "RetrievalOutput",
+  "description": "Schema for the output of get_next_question()",
+  "type": ["object", "null"],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "pattern": "^Q[0-9]{4}$",
+      "description": "Unique question identifier"
+    },
+    "question_text": {
+      "type": "string",
+      "description": "Full text of the question to ask the claimant"
+    },
+    "question_field": {
+      "type": "string",
+      "description": "The logical field this question targets"
+    },
+    "trigger": {
+      "type": "string",
+      "description": "The active incident type that triggered this question"
+    },
+    "score_breakdown": {
+      "type": "object",
+      "required": ["priority", "relevance", "gap_fill", "composite"],
+      "properties": {
+        "priority":   {"type": "number", "minimum": 0, "maximum": 1},
+        "relevance":  {"type": "number", "minimum": 0, "maximum": 1},
+        "gap_fill":   {"type": "number", "minimum": 0, "maximum": 1},
+        "composite":  {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "audit": {
+      "type": "object",
+      "required": ["hard_filter_pool_size", "total_suppressed", "selected_reason"],
+      "properties": {
+        "hard_filter_pool_size": {
+          "type": "integer",
+          "description": "Number of questions that passed the hard filter"
+        },
+        "total_suppressed": {
+          "type": "integer",
+          "description": "Number of questions suppressed by hard filter"
+        },
+        "selected_reason": {
+          "type": "string",
+          "description": "Human-readable explanation of why this question was chosen"
+        },
+        "answered_so_far": {
+          "type": "integer"
+        },
+        "extracted_so_far": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "required": ["question_id", "question_text", "question_field", "trigger", "score_breakdown", "audit"]
+}

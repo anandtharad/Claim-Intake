@@ -1,0 +1,57 @@
+{
+  "summary": {
+    "raw_count": 1265,
+    "valid_count": 839,
+    "rejected_count": 426,
+    "pass_a_rejected": 120,
+    "pass_b_rejected": 115,
+    "pass_c_rejected": 191
+  },
+  "coverage": {
+    "category_counts": {
+      "collision_dynamics": 199,
+      "damage_assessment": 80,
+      "fire_specific": 47,
+      "flood_specific": 45,
+      "fraud_consistency": 62,
+      "incident_basics": 104,
+      "legal_reporting": 35,
+      "natural_disaster_specific": 17,
+      "policy_eligibility": 48,
+      "repair_settlement": 78,
+      "theft_specific": 47,
+      "third_party_details": 35,
+      "vandalism_specific": 42
+    },
+    "priority_counts": {
+      "1": 37,
+      "2": 174,
+      "3": 414,
+      "4": 192,
+      "5": 22
+    },
+    "incident_type_coverage": {
+      "collision": 555,
+      "collision_animal": 184,
+      "collision_wall": 220,
+      "fire": 336,
+      "flood": 316,
+      "hit_and_run": 359,
+      "natural_disaster": 310,
+      "rollover": 329,
+      "self_accident": 394,
+      "theft": 174,
+      "theft_attempted": 37,
+      "vandalism": 318
+    },
+    "warnings": [
+      "LOW_COVERAGE: natural_disaster_specific has only 17 questions (min 30)"
+    ]
+  },
+  "rejection_breakdown": {
+    "schema_errors": 120,
+    "logic_errors": 115,
+    "exact_duplicates": 181,
+    "near_duplicates": 10
+  }
+}

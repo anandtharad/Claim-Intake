@@ -1,0 +1,51 @@
+{
+  "incident_types": [
+    "collision", "collision_wall", "collision_animal", "hit_and_run",
+    "theft", "theft_attempted", "fire", "flood", "vandalism",
+    "natural_disaster", "self_accident", "rollover"
+  ],
+  "damage_areas": [
+    "front_bumper", "rear_bumper", "left_door_front", "left_door_rear",
+    "right_door_front", "right_door_rear", "hood", "boot", "roof",
+    "windshield_front", "windshield_rear", "left_headlamp", "right_headlamp",
+    "left_tail_lamp", "right_tail_lamp", "left_fender", "right_fender",
+    "left_quarter_panel", "right_quarter_panel", "underbody", "engine",
+    "fuel_tank", "airbag_driver", "airbag_passenger", "airbag_side",
+    "tyre_front_left", "tyre_front_right", "tyre_rear_left", "tyre_rear_right",
+    "rim_front_left", "rim_front_right", "rim_rear_left", "rim_rear_right",
+    "chassis", "suspension_front", "suspension_rear", "exhaust",
+    "dashboard", "steering_wheel", "gear_box", "radiator", "battery"
+  ],
+  "damage_severities": ["minor", "moderate", "severe", "total_loss"],
+  "impact_directions": ["front", "rear", "left_side", "right_side", "top", "rollover", "multiple"],
+  "document_types": [
+    "FIR", "police_report", "repair_estimate", "photos_vehicle",
+    "photos_scene", "video_dashcam", "video_cctv", "driving_license",
+    "RC_copy", "insurance_policy", "medical_report", "witness_statement",
+    "fire_brigade_report", "flood_authority_report", "towing_receipt"
+  ],
+  "road_types": ["urban", "highway", "rural", "expressway", "parking_lot", "private_road", "flyover"],
+  "weather_conditions": ["clear", "rain", "heavy_rain", "fog", "dense_fog", "night", "dust_storm", "hail"],
+  "time_of_day": ["morning", "afternoon", "evening", "night", "early_morning"],
+  "coverage_flags": [
+    "own_damage", "third_party_liability", "comprehensive",
+    "add_on_zero_dep", "add_on_roadside_assistance", "add_on_engine_protect",
+    "add_on_invoice_cover", "add_on_consumables", "add_on_key_replacement",
+    "add_on_tyre_protect", "add_on_ncb_protect"
+  ],
+  "vehicle_makes": [
+    "Maruti", "Hyundai", "Tata", "Honda", "Toyota", "Mahindra",
+    "Kia", "MG", "Renault", "Nissan", "Ford", "Volkswagen",
+    "Skoda", "BMW", "Mercedes", "Audi", "Jeep", "Isuzu"
+  ],
+  "settlement_types": ["cashless", "reimbursement"],
+  "repair_types": ["authorised_workshop", "preferred_workshop", "own_workshop"],
+  "driver_relationships": ["self", "spouse", "parent", "child", "employee", "friend", "other"],
+  "usage_types": ["personal", "commercial", "taxi", "school_van", "ambulance"],
+  "claim_categories_all": [
+    "incident_basics", "collision_dynamics", "damage_assessment",
+    "third_party_details", "legal_reporting", "policy_eligibility",
+    "fraud_consistency", "repair_settlement",
+    "theft_specific", "fire_specific", "flood_specific", "vandalism_specific"
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "ClaimState",
+  "description": "Full claimant state for vehicle insurance intake system",
+  "type": "object",
+  "required": ["category", "answered_question_ids", "already_extracted_categories"],
+  "properties": {
+    "category": {
+      "type": ["string", "null"],
+      "enum": ["collision", "collision_wall", "collision_animal", "hit_and_run",
+               "theft", "theft_attempted", "fire", "flood", "vandalism",
+               "natural_disaster", "self_accident", "rollover", null],
+      "description": "Primary incident type"
+    },
+    "loss_datetime": {
+      "type": ["string", "null"],
+      "description": "Date and time of loss (ISO string or natural language)"
+    },
+    "loss_location": {
+      "type": ["object", "null"],
+      "properties": {
+        "city": {"type": ["string", "null"]},
+        "state": {"type": ["string", "null"]},
+        "road_name": {"type": ["string", "null"]},
+        "road_type": {
+          "type": ["string", "null"],
+          "enum": ["urban", "highway", "rural", "expressway", "parking_lot", "private_road", "flyover", null]
+        },
+        "landmark": {"type": ["string", "null"]}
+      }
+    },
+    "vehicle": {
+      "type": ["object", "null"],
+      "properties": {
+        "make": {"type": ["string", "null"]},
+        "model": {"type": ["string", "null"]},
+        "year": {"type": ["integer", "null"], "minimum": 1980, "maximum": 2030},
+        "registration_number": {"type": ["string", "null"]},
+        "fuel_type": {"type": ["string", "null"], "enum": ["petrol", "diesel", "cng", "electric", "hybrid", null]},
+        "colour": {"type": ["string", "null"]}
+      }
+    },
+    "drivable": {"type": ["boolean", "null"], "description": "Is the insured vehicle still drivable?"},
+    "vehicle_towed": {"type": ["boolean", "null"]},
+    "airbags_deployed": {"type": ["boolean", "null"]},
+    "injury_reported": {"type": ["boolean", "null"]},
+    "injury_details": {"type": ["string", "null"]},
+    "third_party_involved": {"type": ["boolean", "null"]},
+    "third_party_vehicle_id": {"type": ["string", "null"], "description": "Registration of other vehicle"},
+    "third_party_driver_name": {"type": ["string", "null"]},
+    "third_party_contact": {"type": ["string", "null"]},
+    "third_party_insurer": {"type": ["string", "null"]},
+    "hit_and_run": {"type": ["boolean", "null"]},
+    "police_report_filed": {"type": ["boolean", "null"]},
+    "fir_number": {"type": ["string", "null"]},
+    "police_station": {"type": ["string", "null"]},
+    "witnesses_present": {"type": ["boolean", "null"]},
+    "witness_contact": {"type": ["string", "null"]},
+    "evidence_photos_available": {"type": ["boolean", "null"]},
+    "evidence_video_available": {"type": ["boolean", "null"]},
+    "dashcam_available": {"type": ["boolean", "null"]},
+    "damage_areas": {
+      "type": ["array", "null"],
+      "items": {"type": "string"},
+      "description": "List of damaged vehicle parts"
+    },
+    "damage_severity": {
+      "type": ["string", "null"],
+      "enum": ["minor", "moderate", "severe", "total_loss", null]
+    },
+    "impact_direction": {
+      "type": ["string", "null"],
+      "enum": ["front", "rear", "left_side", "right_side", "top", "rollover", "multiple", null]
+    },
+    "speed_estimate": {"type": ["string", "null"], "enum": ["low", "medium", "high", null]},
+    "vehicle_moving_status": {"type": ["string", "null"], "enum": ["moving", "parked", "stationary_at_signal", null]},
+    "weather_condition": {"type": ["string", "null"]},
+    "road_condition": {"type": ["string", "null"]},
+    "signal_compliance": {"type": ["string", "null"]},
+    "lane_action": {"type": ["string", "null"]},
+    "policy_active": {"type": ["boolean", "null"]},
+    "policy_number": {"type": ["string", "null"]},
+    "driver_is_owner": {"type": ["boolean", "null"]},
+    "driver_name": {"type": ["string", "null"]},
+    "driver_license_valid": {"type": ["boolean", "null"]},
+    "driver_relationship": {"type": ["string", "null"]},
+    "vehicle_usage_type": {"type": ["string", "null"], "enum": ["personal", "commercial", "taxi", "school_van", "ambulance", null]},
+    "coverage_type": {"type": ["string", "null"]},
+    "add_ons": {"type": ["array", "null"], "items": {"type": "string"}},
+    "settlement_preference": {"type": ["string", "null"], "enum": ["cashless", "reimbursement", null]},
+    "repair_preference": {"type": ["string", "null"]},
+    "workshop_name": {"type": ["string", "null"]},
+    "towing_required": {"type": ["boolean", "null"]},
+    "previous_claims": {"type": ["integer", "null"]},
+    "theft_keys_available": {"type": ["boolean", "null"]},
+    "theft_forced_entry": {"type": ["boolean", "null"]},
+    "theft_tracking_device": {"type": ["boolean", "null"]},
+    "fire_source": {"type": ["string", "null"]},
+    "fire_brigade_called": {"type": ["boolean", "null"]},
+    "flood_water_level": {"type": ["string", "null"]},
+    "flood_engine_cranked": {"type": ["boolean", "null"]},
+    "vandalism_type": {"type": ["string", "null"]},
+    "already_extracted_categories": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": [],
+      "description": "question_field values already extracted — suppresses future questions targeting these"
+    },
+    "answered_question_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "default": [],
+      "description": "IDs of questions already asked in this session"
+    }
+  },
+  "additionalProperties": false
+}
